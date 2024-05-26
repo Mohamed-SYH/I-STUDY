@@ -1,0 +1,137 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        /* .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        } */
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        form input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background-color: #edf8fe;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+        }
+        ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style=" max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        {% if is_teacher %}
+
+        <h1>Add Flashcard</h1>
+        <form method="post" action="{% url 'add_flashcard' %}">
+            {% csrf_token %}
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question">
+            <label for="option1">Answer 1:</label>
+            <input type="text" id="option1" name="option1">
+            <label for="option2">Answer 2:</label>
+            <input type="text" id="option2" name="option2">
+            <label for="option3">Answer 3:</label>
+            <input type="text" id="option3" name="option3">
+            <label for="option4">Answer 4:</label>
+            <input type="text" id="option4" name="option4">
+            <label for="correct_answer">Correct Answer:</label>
+            <input type="text" id="correct_answer" name="correct_answer">
+            <button type="submit">Submit</button>
+        </form>
+        <h1 style="margin-top: 50px; margin-bottom: 10px;">Current Flashcards</h1>
+        <ul>
+            {% for flashcard in flashcards %}
+                <li><a href="{% url 'flashcard_detail' flashcard.id %}">Question {{ forloop.counter }}</a></li>
+            {% endfor %}
+            {% if user.is_authenticated %}
+            {% if user.is_teacher %}
+                <li style="color: white;background-color: red;"><a  href="{% url 'teacher' %}">Go to Teacher Dashboard</a></li>
+            {% else %}
+                <li><a style="color: red;" href="{% url 'student' %}">Go to Student Dashboard</a></li>
+            {% endif %}
+         {% endif %}
+        </ul>
+
+        {% else %}
+        <!-- Display list of flashcards for students -->
+<h1>Flashcards</h1>
+<ul>
+    {% for flashcard in flashcards %}
+        <li><a href="{% url 'flashcard_detail' flashcard.id %}">Question {{ forloop.counter }}</a></li>
+    {% endfor %}
+    <!-- Add link based on user role -->
+   {% if user.is_authenticated %}
+   {% if user.is_teacher %}
+       <li><a href="{% url 'teacher' %}">Go to Teacher Dashboard</a></li>
+   {% else %}
+       <li  style="color: white;background-color: red;"><a  href="{% url 'student' %}">Go to Student Dashboard</a></li>
+   {% endif %}
+{% endif %}
+</ul>
+
+
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

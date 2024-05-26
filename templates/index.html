@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} I-STUDY {% endblock %}
+
+
+{% block content %} 
+            <div class="row">
+                    <div class="col-6 main_section">
+                            <h5>Welcome to</h5>
+                            <h1> i-STUDY</h1>
+                            <span>Where you can <strong>Enjoy</strong> <br>Your <strong>Study</strong> </span><br>
+                            <hr>
+                            <a href="/login" class="btn btn-info"> Join Us Now</a> &nbsp; <a href="/login" class="btn btn-primary">More ...</a>
+                               
+                    </div>
+                    <div class="col-6">
+                            <img src="{% static 'others/classroom3.png' %}" alt="">
+                    </div>
+            </div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        /* .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        } */
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .correct-answer {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h1>{{ flashcard.question }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label><input type="radio" name="answer" value="{{ flashcard.option1 }}" {% if selected_answer == flashcard.option1 %}checked{% endif %}> {{ flashcard.option1 }}</label>
+            <label><input type="radio" name="answer" value="{{ flashcard.option2 }}" {% if selected_answer == flashcard.option2 %}checked{% endif %}> {{ flashcard.option2 }}</label>
+            <label><input type="radio" name="answer" value="{{ flashcard.option3 }}" {% if selected_answer == flashcard.option3 %}checked{% endif %}> {{ flashcard.option3 }}</label>
+            <label><input type="radio" name="answer" value="{{ flashcard.option4 }}" {% if selected_answer == flashcard.option4 %}checked{% endif %}> {{ flashcard.option4 }}</label><br>
+            <button type="submit">Submit</button>
+            <a href="{% url 'flashcard_list' %}"><button type="button" style="background-color: #6c757d;">Return to Question List</button></a>
+        </form>
+        {% if feedback %}
+            <p class="feedback {% if feedback == 'Correct! Well done.' %}correct{% else %}incorrect{% endif %}">{{ feedback }}</p>
+            {% if feedback == "Incorrect. Try again." %}
+                <p class="correct-answer">Correct Answer: {{ flashcard.correct_answer }}</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}
