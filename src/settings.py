@@ -1,16 +1,19 @@
 import os
 from pathlib import Path
 
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tl^+0x-51ke0(x85^no6!dl1hwvkm560ht=wro)36a-ik2k4h*'
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -67,6 +70,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
 }
+
+database_url=os.environ.get("DATABASE_URL")
+
+DATABASES["default"]=dj_database_url.parse(database_url)
+#"postgres://i_study_user:Td8yglm62CF3G7vh3RkSiNFZQ067zzFa@dpg-cp9q2jf109ks73ad4j70-a.oregon-postgres.render.com/i_study"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
